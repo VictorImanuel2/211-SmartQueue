@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoQ System</title>
+    <title>Customer Kiosk - NoQ System</title>
     <link rel="stylesheet" href="/static/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="top-nav">
+        <div class="container">
+            <a href="/" class="active">Customer Kiosk</a>
+            <a href="/admin">Admin Dashboard</a>
+        </div>
+    </div>
     <div class="container">
         <header>
-            <h1>NoQ <span class="badge">PROTOTYPE</span></h1>
-            <p>Digital Queue Management System (IS-211)</p>
+            <h1>NoQ <span class="badge">KIOSK</span></h1>
+            <p>Your digital queuing solution.</p>
         </header>
 
-        <main class="grid-layout">
+        <main class="grid-layout customer-view">
             <!-- Customer Kiosk Section -->
             <section class="card kiosk">
-                <h2>🎫 Customer Kiosk</h2>
+                <h2>🎫 Get a New Ticket</h2>
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" id="custName" placeholder="Enter your name">
+                    <input type="text" id="custName" placeholder="e.g., John Doe">
                 </div>
                 <div class="form-group">
                     <label>Service Type</label>
@@ -33,59 +39,38 @@
                 </div>
                 <div class="form-group checkbox-group">
                     <label>
-                        <input type="checkbox" id="custPriority"> Priority Customer (Urgent)
+                        <input type="checkbox" id="custPriority"> This is an urgent matter
                     </label>
                 </div>
-                <button onclick="takeTicket()" class="btn primary">Get Ticket</button>
+                <button class="btn primary">Get My Ticket</button>
 
                 <div id="ticketResult" class="result-box hidden">
-                    <h3>Ticket Issued!</h3>
+                    <h3>Your Ticket is Ready!</h3>
+                    <p>Your Ticket ID is:</p>
                     <div class="ticket-display">
                         <span class="ticket-id" id="displayTicketId">--</span>
                     </div>
-                    <p>Position: <strong id="displayPos">--</strong></p>
-                    <p>Est. Wait: <strong id="displayWait">--</strong> mins</p>
+                    <hr>
+                    <p>Current Position: <strong id="displayPos">--</strong></p>
+                    <p>Est. Wait Time: <strong id="displayWait">--</strong> minutes</p>
                 </div>
             </section>
 
             <!-- Status Check Section -->
             <section class="card status">
-                <h2>🔍 Check Status</h2>
+                <h2>🔍 Check Your Status</h2>
+                <p>Already have a ticket? Enter the ID below to see your current position in the queue.</p>
                 <div class="form-group">
-                    <input type="text" id="checkId" placeholder="Enter Ticket ID">
-                    <button onclick="checkStatus()" class="btn secondary">Check</button>
+                    <label>Ticket ID</label>
+                    <div class="input-with-button">
+                        <input type="text" id="checkId" placeholder="Enter Your Ticket ID">
+                        <button class="btn secondary">Check</button>
+                    </div>
                 </div>
                 <div id="statusResult" class="result-box hidden">
-                    <p>Status: <strong id="statusPos">--</strong></p>
-                    <p>Wait: <strong id="statusWait">--</strong> mins</p>
-                </div>
-            </section>
-
-            <!-- Admin Desk Section -->
-            <section class="card admin">
-                <h2>📢 Admin Desk</h2>
-                <div class="admin-controls">
-                    <select id="adminService">
-                        <option value="passport">Passport Queue</option>
-                        <option value="tax">Tax Queue</option>
-                        <option value="municipal">Municipal Queue</option>
-                        <option value="support">Support Queue</option>
-                    </select>
-                    <button onclick="serveNext()" class="btn success">Call Next</button>
-                </div>
-                
-                <div id="serveResult" class="result-box hidden">
-                    <h3>Now Serving</h3>
-                    <div class="serving-display">
-                        <span id="servingTicket">--</span>
-                    </div>
-                    <p>Customer: <span id="servingName">--</span></p>
-                </div>
-
-                <div class="analytics-preview">
-                    <h3>Live Metrics (Avg Wait)</h3>
-                    <ul id="statsList"></ul>
-                    <button onclick="refreshStats()" class="btn text-btn">Refresh Stats</button>
+                    <h3>Current Status</h3>
+                    <p>Position in Queue: <strong id="statusPos">--</strong></p>
+                    <p>Estimated Wait: <strong id="statusWait">--</strong> minutes</p>
                 </div>
             </section>
         </main>
