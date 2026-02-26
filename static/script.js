@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("SmartQueue Loaded");
+    console.log("NoQ Loaded");
     
     // Attach event listeners explicitly to avoid inline HTML onclick issues if CSP strict
     document.querySelector('.kiosk .btn.primary').addEventListener('click', takeTicket);

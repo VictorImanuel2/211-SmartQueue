@@ -6,7 +6,7 @@ from .utils import generate_id, get_current_time
 
 class QueueManager:
     """
-    Core backend logic for SmartQueue.
+    Core backend logic for NoQ.
     Manages queues, priority heaps, and fast lookups.
     """
 
