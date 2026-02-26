@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartQueue System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SmartQueue <span class="badge">PROTOTYPE</span></h1>
+            <p>Digital Queue Management System (IS-211)</p>
+        </header>
+
+        <main class="grid-layout">
+            <!-- Customer Kiosk Section -->
+            <section class="card kiosk">
+                <h2>🎫 Customer Kiosk</h2>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="custName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Service Type</label>
+                    <select id="custService">
+                        <option value="passport">Passport Services</option>
+                        <option value="tax">Tax Office</option>
+                        <option value="municipal">Municipal Services</option>
+                        <option value="support">General Support</option>
+                    </select>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="custPriority"> Priority Customer (Urgent)
+                    </label>
+                </div>
+                <button onclick="takeTicket()" class="btn primary">Get Ticket</button>
+
+                <div id="ticketResult" class="result-box hidden">
+                    <h3>Ticket Issued!</h3>
+                    <div class="ticket-display">
+                        <span class="ticket-id" id="displayTicketId">--</span>
+                    </div>
+                    <p>Position: <strong id="displayPos">--</strong></p>
+                    <p>Est. Wait: <strong id="displayWait">--</strong> mins</p>
+                </div>
+            </section>
+
+            <!-- Status Check Section -->
+            <section class="card status">
+                <h2>🔍 Check Status</h2>
+                <div class="form-group">
+                    <input type="text" id="checkId" placeholder="Enter Ticket ID">
+                    <button onclick="checkStatus()" class="btn secondary">Check</button>
+                </div>
+                <div id="statusResult" class="result-box hidden">
+                    <p>Status: <strong id="statusPos">--</strong></p>
+                    <p>Wait: <strong id="statusWait">--</strong> mins</p>
+                </div>
+            </section>
+
+            <!-- Admin Desk Section -->
+            <section class="card admin">
+                <h2>📢 Admin Desk</h2>
+                <div class="admin-controls">
+                    <select id="adminService">
+                        <option value="passport">Passport Queue</option>
+                        <option value="tax">Tax Queue</option>
+                        <option value="municipal">Municipal Queue</option>
+                        <option value="support">Support Queue</option>
+                    </select>
+                    <button onclick="serveNext()" class="btn success">Call Next</button>
+                </div>
+                
+                <div id="serveResult" class="result-box hidden">
+                    <h3>Now Serving</h3>
+                    <div class="serving-display">
+                        <span id="servingTicket">--</span>
+                    </div>
+                    <p>Customer: <span id="servingName">--</span></p>
+                </div>
+
+                <div class="analytics-preview">
+                    <h3>Live Metrics (Avg Wait)</h3>
+                    <ul id="statsList"></ul>
+                    <button onclick="refreshStats()" class="btn text-btn">Refresh Stats</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
