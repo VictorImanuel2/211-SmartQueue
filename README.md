@@ -1,4 +1,4 @@
-# SmartQueue Web App (IS-211 Spring 2026)
+# NoQ Web App (IS-211 Spring 2026)
 
 A prototype digital queue management system for public offices, featuring a Python backend (`deque`, `heapq`) and a simple web frontend (`Flask`, `JS`, `CSS`).
 

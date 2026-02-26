@@ -7,7 +7,7 @@ from .analytics import rank_services_by_avg_wait
 
 def print_header():
     print("\n" + "="*50)
-    print("   SMART QUEUE SYSTEM (IS-211 PROTOTYPE)   ")
+    print("      NOQ SYSTEM (IS-211 PROTOTYPE)      ")
     print("="*50 + "\n")
 
 def print_menu():
