@@ -9,18 +9,39 @@ app = Flask(__name__)
 # Global In-Memory Queue Manager
 manager = QueueManager()
 
-# Pre-populate some data for demo
+# Pre-populate with more diverse data for a better demo
 try:
+    print("Pre-populating queue with mock data...")
+    # Passport queue
     manager.issue_ticket("u1", "Alice", "passport", priority_level=0)
     manager.issue_ticket("u2", "Bob", "passport", priority_level=0)
     manager.issue_ticket("u3", "Charlie", "passport", priority_level=5) # Priority
-    print("✅ Pre-populated queue data.")
+    
+    # Tax queue
+    manager.issue_ticket("u4", "Diana", "tax", priority_level=8) # High Priority
+    manager.issue_ticket("u5", "Eve", "tax", priority_level=0)
+
+    # Municipal queue
+    manager.issue_ticket("u6", "Frank", "municipal", priority_level=0)
+    
+    # Support queue
+    manager.issue_ticket("u7", "Grace", "support", priority_level=0)
+    manager.issue_ticket("u8", "Henry", "support", priority_level=0)
+    
+    print("✅ 8 mock tickets created across different services.")
 except Exception as e:
     print(f"⚠️ Pre-populating error: {e}")
 
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    # Redirect to customer page by default
+    return render_template('customer.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
+
 
 # --- API ENDPOINTS ---
 
@@ -28,7 +49,8 @@ def home():
 def create_ticket():
     data = request.json
     try:
-        user_id = data.get('user_id', 'guest')
+        # Use a unique ID for guests to allow multiple guest tickets
+        user_id = f"guest-{manager.counter}"
         name = data.get('name', 'Guest')
         service = data.get('service', 'passport')
         priority = int(data.get('priority', 0))

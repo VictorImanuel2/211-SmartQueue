@@ -1,0 +1,60 @@
+{% extends "_layout.html" %}
+
+{% block title %}Admin Dashboard - NoQ{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Admin Dashboard</h1>
+    <p>Monitor queues and call the next customer.</p>
+</header>
+
+<main class="main-grid">
+    <!-- Admin Desk Section -->
+    <section class="card admin-desk-card">
+        <h2>📢 Call Next Customer</h2>
+        <div class="admin-controls">
+            <div class="form-group">
+                <label for="adminService">Select Queue</label>
+                <select id="adminService">
+                    <option value="passport">Passport Queue</option>
+                    <option value="tax">Tax Queue</option>
+                    <option value="municipal">Municipal Queue</option>
+                    <option value="support">Support Queue</option>
+                </select>
+            </div>
+            <button id="serveNextBtn" class="btn success">Call Next</button>
+        </div>
+        
+        <div id="serveResult" class="result-box hidden">
+            <h3>Now Serving</h3>
+            <div class="ticket-display">
+                <span id="servingTicket">--</span>
+            </div>
+            <p>Customer: <strong id="servingName">--</strong></p>
+        </div>
+    </section>
+
+    <!-- Live Analytics Section -->
+    <section class="card live-analytics-card">
+        <h2>📊 Live Analytics</h2>
+        <div class="analytics-preview">
+            <h3>Average Wait Time by Service</h3>
+            <ul id="statsList">
+                <li>No served customers yet.</li>
+            </ul>
+            <button id="refreshStatsBtn" class="btn text-btn">Refresh Stats</button>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Specific event listeners for this page
+    document.getElementById('serveNextBtn').addEventListener('click', serveNext);
+    document.getElementById('refreshStatsBtn').addEventListener('click', refreshStats);
+
+    // Initial Load for admin page
+    refreshStats();
+</script>
+{% endblock %}

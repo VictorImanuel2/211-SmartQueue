@@ -1,145 +1,229 @@
 :root {
     --primary: #0070f3;
+    --primary-light: #e6f4ff;
     --secondary: #6c707d; 
     --success: #28a745;
     --error: #dc3545;
     --background: #f8f9fa;
-    --card: white;
-    --text: #333;
+    --card-bg: white;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555;
+    --border-color: #e1e4e8;
 }
 
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--background);
-    color: var(--text);
+    color: var(--text-primary);
     margin: 0;
     padding: 0;
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* New Navigation Styles */
+.main-nav {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 20px;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-link:hover {
+    background-color: #f0f0f0;
+    color: var(--text-primary);
+}
+
+.nav-link.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+
 header {
     text-align: center;
-    padding: 40px 0;
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin: 0;
+    font-weight: 700;
 }
 
-.badge {
+header .badge {
     background: #000;
     color: #fff;
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 6px;
     font-size: 0.8rem;
     vertical-align: middle;
+    margin-left: 8px;
+    font-weight: 600;
 }
 
 header p {
-    color: var(--secondary);
+    color: var(--text-secondary);
     margin-top: 10px;
+    font-size: 1.1rem;
 }
 
-.grid-layout {
+.main-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 25px;
 }
 
 @media (min-width: 768px) {
-    .grid-layout {
-        grid-template-columns: repeat(2, 1fr);
+    .main-grid {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     }
 }
 
 .card {
-    background: var(--card);
-    border-radius: 8px;
-    padding: 20px;
-    border: 1px solid #e1e4e8;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .card h2 {
     margin-top: 0;
-    font-size: 1.25rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
     font-weight: 500;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
 }
 
 input[type="text"], select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .checkbox-group {
     display: flex;
     align-items: center;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #f9f9f9;
 }
 
 .checkbox-group input {
-    margin-right: 10px;
+    margin-right: 12px;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox-group label {
+    margin: 0;
+    font-weight: 500;
 }
 
 .btn {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
     width: 100%;
+    text-align: center;
+    font-size: 1rem;
 }
 
-.primary {
+.btn.primary {
     background: var(--primary);
     color: white;
 }
-.primary:hover { background: #0060df; }
+.btn.primary:hover { background: #0060df; }
 
-.secondary {
+.btn.secondary {
     background: var(--secondary);
     color: white;
 }
+.btn.secondary:hover { background: #5a6268; }
 
-.success {
+.btn.success {
     background: var(--success);
     color: white;
 }
+.btn.success:hover { background: #218838; }
 
-.text-btn {
+.btn.text-btn {
     background: transparent;
     color: var(--primary);
     padding: 5px;
     font-size: 0.9rem;
     width: auto;
 }
+.btn.text-btn:hover { background-color: var(--primary-light); }
 
 .result-box {
     margin-top: 20px;
-    padding: 15px;
-    background: #f0f4f8;
-    border-radius: 4px;
+    padding: 20px;
+    background: var(--primary-light);
+    border: 1px solid #bce0ff;
+    border-radius: 8px;
     text-align: center;
 }
 
@@ -148,35 +232,57 @@ input[type="text"], select {
 }
 
 .ticket-display {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: var(--primary);
     margin-bottom: 10px;
+    letter-spacing: 2px;
 }
 
 .admin-controls {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     gap: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    align-items: end;
 }
 
-.analytics-preview ul {
+.analytics-preview ul, .queue-list ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.analytics-preview li {
+.analytics-preview li, .queue-list li {
     display: flex;
     justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    padding: 12px 5px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
 }
 
-.status {
+.analytics-preview li:last-child, .queue-list li:last-child {
+    border-bottom: none;
+}
+
+.status-card {
     grid-column: 1 / -1;
 }
 
-@media (min-width: 768px) {
-    .ticket-display { font-size: 2rem; }
-    .status { grid-column: span 1; }
+@media (min-width: 950px) {
+    .status-card { grid-column: span 1; }
+}
+
+/* New card styling for admin queue view */
+.queue-card {
+    margin-top: 20px;
+}
+
+.queue-list .priority {
+    font-weight: 600;
+    color: var(--error);
+}
+.queue-list .priority::before {
+    content: '⚡️';
+    margin-right: 5px;
 }
