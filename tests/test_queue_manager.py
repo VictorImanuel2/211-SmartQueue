@@ -1,3 +1,6 @@
+# AI-assisted: Test cases were scaffolded with GitHub Copilot. We described
+# the expected behaviors (FIFO ordering, priority skipping, position math)
+# and Copilot generated the initial test methods, which we then refined.
 import unittest
 from smartqueue.queues import QueueManager
 from smartqueue.models import Ticket

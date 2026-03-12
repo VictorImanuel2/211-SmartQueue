@@ -1,3 +1,21 @@
+# =============================================================================
+# app.py — Flask web server for the NoQ queue management system.
+#
+# Architecture overview:
+#   - This is the HTTP layer. All state lives in-memory in a single
+#     QueueManager instance (see smartqueue/queues.py).
+#   - Two user-facing pages: customer kiosk (/) and admin dashboard (/admin),
+#     rendered via Jinja2 templates in templates/.
+#   - Four JSON API endpoints under /api/ are consumed by static/script.js:
+#       POST /api/ticket      — issue a new ticket (normal or priority)
+#       GET  /api/status/<id>  — check position & estimated wait
+#       POST /api/serve        — admin calls next customer from a queue
+#       GET  /api/analytics    — average wait time per service
+#   - Data models (Ticket, Customer, ServiceType) are in smartqueue/models.py.
+#   - Analytics logic is in smartqueue/analytics.py.
+#   - No database; everything resets on server restart.
+# =============================================================================
+
 from flask import Flask, render_template, request, jsonify
 from smartqueue.queues import QueueManager
 from smartqueue.analytics import rank_services_by_avg_wait
