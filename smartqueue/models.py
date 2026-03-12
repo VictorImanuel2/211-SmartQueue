@@ -1,3 +1,19 @@
+# =============================================================================
+# models.py — Domain models for the NoQ queue system.
+#
+# Contains:
+#   - ServiceType: enum of available service categories (passport, tax, etc.)
+#   - Customer: identifies a person in the queue (user_id + name)
+#   - Ticket: the central entity — links a Customer to a ServiceType, tracks
+#     priority, status (WAITING/SERVED/CANCELLED), and timing.
+#
+# Design notes:
+#   - Ticket.priority_level: 0 = normal (goes into FIFO deque),
+#     >0 = priority (goes into a max-heap in QueueManager).
+#   - Ticket.__lt__ exists for natural sorting by issue time, but the heap
+#     in queues.py sorts by (-priority, counter) tuples instead.
+# =============================================================================
+
 from enum import Enum
 from dataclasses import dataclass
 from datetime import datetime

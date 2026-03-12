@@ -1,3 +1,21 @@
+# =============================================================================
+# queues.py — Core queue engine for NoQ.
+#
+# QueueManager is the single source of truth for all ticket state. It uses a
+# dual data-structure strategy per (office, service) pair:
+#   - normal_queues:  collections.deque  → O(1) FIFO for priority_level == 0
+#   - priority_heaps: heapq min-heap     → O(log n) extraction for priority > 0
+#     Entries are (-priority, counter, ticket_id) so higher priority pops first.
+#
+# Lookup maps (active_tickets_by_id, active_ticket_by_user) keep all point
+# queries O(1). The counter field breaks ties in the heap for FIFO among
+# equal-priority tickets.
+#
+# Serving order: priority heap is drained first, then the normal deque.
+# Analytics accumulators (served_count, total_wait_time_sum) are updated on
+# each serve and consumed by analytics.py.
+# =============================================================================
+
 import heapq
 from collections import deque
 from typing import Dict, List, Tuple, Optional
@@ -73,6 +91,10 @@ class QueueManager:
         # Add to Queue Structure
         queue_key = (office_id, service_enum.value)
         
+        # AI-assisted: GitHub Copilot helped design the dual data-structure
+        # approach below — using a heap for priority customers and a deque for
+        # normal ones — and suggested the (-priority, counter) tuple pattern
+        # to simulate a max-heap with Python's min-heap.
         if priority_level > 0:
             # Priority Queue -> Heap
             # O(log n) push
@@ -93,6 +115,9 @@ class QueueManager:
 
         return ticket
 
+    # AI-assisted: The serve_next method's "drain priority heap first, then
+    # fall back to normal deque" pattern was suggested by ChatGPT when we asked
+    # how to combine a priority queue with a FIFO queue.
     def serve_next(self, office_id: str, service: str) -> Optional[Ticket]:
         """
         O(log n) - Serve next customer.
