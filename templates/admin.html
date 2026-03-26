@@ -24,7 +24,7 @@
             </div>
             <button id="serveNextBtn" class="btn success">Call Next</button>
         </div>
-        
+
         <div id="serveResult" class="result-box hidden">
             <h3>Now Serving</h3>
             <div class="ticket-display">
@@ -34,15 +34,15 @@
         </div>
     </section>
 
-    <!-- Live Analytics Section -->
-    <section class="card live-analytics-card">
-        <h2>📊 Live Analytics</h2>
-        <div class="analytics-preview">
-            <h3>Average Wait Time by Service</h3>
-            <ul id="statsList">
-                <li>No served customers yet.</li>
+    <!-- Current Queue Overview Section -->
+    <section class="card queue-overview-card">
+        <h2>📋 Current Queue Overview</h2>
+        <div class="queue-overview-preview">
+            <h3>Customers Waiting by Service</h3>
+            <ul id="queueOverviewList">
+                <li>Loading queue overview...</li>
             </ul>
-            <button id="refreshStatsBtn" class="btn text-btn">Refresh Stats</button>
+            <button id="refreshQueueBtn" class="btn text-btn">Refresh Overview</button>
         </div>
     </section>
 </main>
@@ -50,11 +50,9 @@
 
 {% block extra_js %}
 <script>
-    // Specific event listeners for this page
     document.getElementById('serveNextBtn').addEventListener('click', serveNext);
-    document.getElementById('refreshStatsBtn').addEventListener('click', refreshStats);
+    document.getElementById('refreshQueueBtn').addEventListener('click', refreshQueueOverview);
 
-    // Initial Load for admin page
-    refreshStats();
+    refreshQueueOverview();
 </script>
 {% endblock %}

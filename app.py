@@ -6,21 +6,18 @@
 #     QueueManager instance (see smartqueue/queues.py).
 #   - Two user-facing pages: customer kiosk (/) and admin dashboard (/admin),
 #     rendered via Jinja2 templates in templates/.
-#   - Four JSON API endpoints under /api/ are consumed by static/script.js:
-#       POST /api/ticket      — issue a new ticket (normal or priority)
-#       GET  /api/status/<id>  — check position & estimated wait
-#       POST /api/serve        — admin calls next customer from a queue
-#       GET  /api/analytics    — average wait time per service
+#   - JSON API endpoints under /api/ are consumed by static/script.js:
+#       POST /api/ticket          — issue a new ticket (normal or priority)
+#       GET  /api/status/<id>     — check position & estimated wait
+#       POST /api/serve           — admin calls next customer from a queue
+#       GET  /api/queue           — get queue details for a given service
+#       GET  /api/queue-overview  — get current waiting counts by service
 #   - Data models (Ticket, Customer, ServiceType) are in smartqueue/models.py.
-#   - Analytics logic is in smartqueue/analytics.py.
 #   - No database; everything resets on server restart.
 # =============================================================================
 
 from flask import Flask, render_template, request, jsonify
 from smartqueue.queues import QueueManager
-from smartqueue.analytics import rank_services_by_avg_wait
-from smartqueue.models import ServiceType
-import threading
 
 app = Flask(__name__)
 
@@ -30,13 +27,14 @@ manager = QueueManager()
 # Pre-populate with more diverse data for a better demo
 try:
     print("Pre-populating queue with mock data...")
+    
     # Passport queue
     manager.issue_ticket("u1", "Alice", "passport", priority_level=0)
     manager.issue_ticket("u2", "Bob", "passport", priority_level=0)
-    manager.issue_ticket("u3", "Charlie", "passport", priority_level=5) # Priority
+    manager.issue_ticket("u3", "Charlie", "passport", priority_level=5)  # Priority
     
     # Tax queue
-    manager.issue_ticket("u4", "Diana", "tax", priority_level=8) # High Priority
+    manager.issue_ticket("u4", "Diana", "tax", priority_level=8)  # High Priority
     manager.issue_ticket("u5", "Eve", "tax", priority_level=0)
 
     # Municipal queue
@@ -53,8 +51,8 @@ except Exception as e:
 
 @app.route('/')
 def home():
-    # Redirect to customer page by default
     return render_template('customer.html')
+
 
 @app.route('/admin')
 def admin():
@@ -74,7 +72,6 @@ def create_ticket():
         priority = int(data.get('priority', 0))
         
         ticket = manager.issue_ticket(user_id, name, service, priority_level=priority)
-        
         position, wait = manager.get_position(ticket.ticket_id)
         
         return jsonify({
@@ -90,6 +87,7 @@ def create_ticket():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+
 @app.route('/api/status/<ticket_id>', methods=['GET'])
 def get_status(ticket_id):
     pos, wait = manager.get_position(ticket_id)
@@ -104,6 +102,7 @@ def get_status(ticket_id):
         'customer': ticket.customer.name,
         'service': ticket.service.value
     })
+
 
 @app.route('/api/serve', methods=['POST'])
 def serve_next():
@@ -125,13 +124,49 @@ def serve_next():
     else:
         return jsonify({'success': False, 'message': 'No customers waiting'}), 404
 
-@app.route('/api/analytics', methods=['GET'])
-def get_analytics():
-    stats = rank_services_by_avg_wait(manager)
+
+@app.route('/api/queue', methods=['GET'])
+def get_queue():
+    service = request.args.get('service', 'passport')
+    try:
+        queue = manager.get_queue(service)
+        return jsonify({
+            'success': True,
+            'queue': [
+                {
+                    'ticket_id': t.ticket_id,
+                    'name': t.customer.name,
+                    'priority': t.priority_level
+                }
+                for t in queue
+            ]
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/queue-overview', methods=['GET'])
+def get_queue_overview():
+    services = ['passport', 'tax', 'municipal', 'support']
+    queues = []
+
+    for service in services:
+        waiting_count = 0
+
+        for ticket in manager.active_tickets_by_id.values():
+            if ticket.service.value == service and ticket.status == "WAITING":
+                waiting_count += 1
+
+        queues.append({
+            'service': service,
+            'waiting_count': waiting_count
+        })
+
     return jsonify({
         'success': True,
-        'stats': [{'service': s, 'avg_wait': w} for s, w in stats]
+        'queues': queues
     })
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
